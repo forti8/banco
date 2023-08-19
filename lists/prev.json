@@ -1,0 +1,42 @@
+{
+"1": {
+"Nome": "Renda Fixa Banco Granville",
+"Valor": 103.30,
+"Moeda": "R$",
+        "comp": {
+        "Ações":[],
+        "Fii's":[],
+        "Rf":[
+        "Cdb Banco Granville - 100% cdi", 
+        "Cri Banco Granville - 95% cdi - 5 anos",
+        "Cra Banco Granville - 95% cdi - 5 anos",
+        "Debenturê Banco granville"
+        ]}
+},
+"2": {
+"Nome": "Multimercado Banco Granville",
+"Valor": 1500,
+"Moeda": "R$",
+        "comp": {
+        "Ações":[
+        "BBAS3",
+        "KLBN11",
+        "SUZN11",
+        "CPLE11",
+        "TAEE11",
+        "SANB11"
+        ],
+        "Fii's":[
+        "MXRF11",
+        "XPML11",
+        "ALZR11"
+        ],
+        "Rf":[
+        "Cdb Banco Granville - 100% cdi", 
+        "Cri Banco Granville - 95% cdi - 5 anos",
+        "Debenturê Banco do Brasil",
+        "Debenturê Banco granville"
+        ]}
+}
+
+}
