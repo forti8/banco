@@ -16,28 +16,6 @@ const compra = new Compra();
 // cria um objeto usando a classe banco
 const banco = new Banco();
 
-const fs = require('fs');
-
-// Caminho para o arquivo JSON
-const caminhoArquivo = './lists/prev.json';
-
-// Lê o conteúdo do arquivo JSON
-fs.readFile(caminhoArquivo, 'utf8', (err, data) => {
-  if (err) {
-    console.error('Erro ao ler o arquivo:', err);
-    return;
-  }
-
-  try {
-    // Transforma o conteúdo do arquivo em um objeto JSON
-    const jsonObject = JSON.parse(data);
-
-previdencia.prevd=jsonObject       
-    // Agora você pode usar o objeto jsonObject
-  } catch (parseError) {
-    console.error('Erro ao analisar o JSON:', parseError);
-  }
-});
 
 // string basica de caracteres para criar um chave
 const char = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789#/+-'
@@ -55,6 +33,51 @@ for (let i = 0; i < l; i++) {
 return key
 };
 
+// lista de previdencias disponiveis
+    const p = {
+      a: {
+        nome: "Renda Fixa Banco Granville",
+        valor: 500,
+        moeda: "R$",
+        comp: {
+          acoes: [],
+          Fii: [],
+          rf: [
+            "Cdb Banco Granville - 100% cdi",
+            "Cri Banco Granville - 95% cdi - 5 anos",
+            "Cra Banco Granville - 95% cdi - 5 anos",
+            "Debenturê Banco granville"
+          ]
+        }
+      },
+      b: {
+        nome: "Multimercado Banco Granville",
+        valor: 1500,
+        moeda: "R$",
+        comp: {
+          acoes: [
+            "BBAS3",
+            "KLBN11",
+            "SUZN11",
+            "CPLE11",
+            "TAEE11",
+            "SANB11"
+          ],
+          Fii: [
+            "MXRF11",
+            "XPML11",
+            "ALZR11"
+          ],
+          rf: [
+            "Cdb Banco Granville - 100% cdi",
+            "Cri Banco Granville - 95% cdi - 5 anos",
+            "Debenturê Banco do Brasil",
+            "Debenturê Banco granville"
+          ]
+        }
+      }
+    };
+
 // como criar uma conta usando array
 // os valores sendo idade
 const contas = {
@@ -71,17 +94,25 @@ const transfAgendadas = {
 "Miguel": ["Rafael",259],
 "Aline": ["Mariane",537],
 "Rafael": ["Jenifer",24],
-"Mariane": ["Aline",282.82],
+"Mariane": ["Aline",282],
 
 };
 
 // passando uma lista de compras a serem feitas
 const comprasAg = {
 "Miguel":168,
-"Aline":262.3,
-"Rafael":363.20,
-"Mariane":26.73,
-"Jenifer":373.3
+"Aline":263,
+"Rafael":320,
+"Mariane":23,
+"Jenifer":373
+}
+
+const prevdAg = {
+"Miguel":"a",
+"Aline":"a",
+"Rafael":"b",
+"Mariane":"b",
+"Jenifer":"a"
 }
 
 // Novo objeto para mapear nomes para IDs
@@ -136,15 +167,48 @@ compra.criarNovaCompra(k, nomeParaId[ca][0], ca, comprasAg[ca])
 banco.removerSaldo(nomeParaId[ca][0],ca,comprasAg[ca])
 }
 
-console.log();
 console.log(previdencia.users);
+console.log(previdencia.prevd)
 
+previdencia.adicionarPrevList(p)
 
+// lista de compras de previdências
+for (const nome in prevdAg) {
+  const chavePrevidencia = prevdAg[nome];
+
+  if (p[chavePrevidencia]) {
+    const valorPrevidencia = p[chavePrevidencia].valor;
+    const idUsuario = nomeParaId[nome][0];
+    
+    if (idUsuario !== undefined) {
+      const user = banco.contas.find(conta => conta.id === idUsuario);
+      
+      if (user && user.saldo >= valorPrevidencia) {
+        // Remover o valor da previdência do saldo do usuário
+        banco.removerSaldo(idUsuario, nome, valorPrevidencia);
+        
+        // Comprar a previdência para o usuário
+        previdencia.comprarPrev(idUsuario, chavePrevidencia);
+        
+        console.log(`${nome} - Previdência "${chavePrevidencia}" comprada.`);
+      } else {
+        console.log(`Compra de previdência "${chavePrevidencia}" para "${nome}" rejeitada: saldo insuficiente.`);
+      }
+    } else {
+      console.log(`Compra de previdência "${chavePrevidencia}" rejeitada: usuário inválido.`);
+    }
+  } else {
+    console.log(`Previdência "${chavePrevidencia}" não encontrada.`);
+  }
+}
+
+console.log(banco.contas)
+
+        
 /* 
-   
-   Criado Por Miguel P. Granville
+Criado Por Miguel P. Granville
 
-   Eu Miguel Granville disponibilizo este código para estudos developer to developer, autorizo com apenas este comentario de menção, Obrigado!
+   Eu Miguel Granville disponibilizo este código para estudos developer to developer, autorizo, com apenas este comentario de menção, Obrigado!
 
 https://github/forti8
 */
